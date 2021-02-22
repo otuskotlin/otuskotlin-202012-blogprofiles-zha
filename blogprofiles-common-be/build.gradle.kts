@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm")
 }
 
 group = rootProject.group
@@ -11,4 +11,12 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+
+    testImplementation(kotlin("test-junit5"))
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 }
