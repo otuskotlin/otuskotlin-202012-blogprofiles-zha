@@ -1,5 +1,8 @@
+val serializationVersion: String by project
+
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 group = rootProject.group
@@ -9,20 +12,28 @@ repositories {
     mavenCentral()
 }
 
+
 kotlin {
     /* Targets configuration omitted. 
     *  To find out how to configure the targets, please follow the link:
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
     js {
-        browser{}
-        nodejs{}
+        browser {
+            testTask {
+                useKarma{
+                    useChromeHeadless()
+                }
+            }
+            binaries.executable()
+        }
     }
-    jvm {}
+    jvm{}
 
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
             }
         }
         val commonTest by getting {
@@ -38,6 +49,7 @@ kotlin {
         }
         val jsTest by getting {
             dependencies {
+                implementation(kotlin("test"))
                 implementation(kotlin("test-js"))
             }
         }
